@@ -137,15 +137,17 @@ export default function LandingPage() {
               <span className="sr-only">Toggle theme</span>
             </Button>
             <Link
-              href="#"
+              href="/login"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Log in
             </Link>
+			<Link href="/register">
             <Button className="rounded-full">
-              Get Started
+              Registrate
               <ChevronRight className="ml-1 size-4" />
             </Button>
+			</Link>
           </div>
           <div className="flex items-center gap-4 md:hidden">
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
