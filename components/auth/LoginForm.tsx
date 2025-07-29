@@ -1,17 +1,38 @@
-import { GalleryVerticalEnd } from "lucide-react";
-import { cn } from "@/lib/utils"; // Assuming this utility is available for class merging
-import { Button } from "@/components/ui/button"; // Assuming shadcn/ui Button component
-import { Input } from "@/components/ui/input"; // Assuming shadcn/ui Input component
-import { Label } from "@/components/ui/label"; // Assuming shadcn/ui Label component
-import Link from "next/link"
+"use client"
 
-// LoginForm component - moved into the same file
+import { useState } from 'react'
+import { supabase } from '@/lib/supabaseClient'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
+
 export default function LoginForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"form">) {
+}: React.ComponentPropsWithoutRef<'form'>) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      alert(error.message)
+    } else {
+      router.push('/dashboard')
+    }
+  }
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+      onSubmit={handleLogin}
+      className={cn('flex flex-col gap-6', className)}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-balance text-sm text-muted-foreground">
@@ -21,7 +42,14 @@ export default function LoginForm({
       <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
@@ -33,7 +61,13 @@ export default function LoginForm({
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
         <Button type="submit" className="w-full">
           Login
@@ -55,12 +89,12 @@ export default function LoginForm({
         </Button>
       </div>
       <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
+        Don&apos;t have an account?{' '}
         <Link href="/register" className="underline underline-offset-4">
           Sign up
         </Link>
       </div>
     </form>
-  );
+  )
 }
 

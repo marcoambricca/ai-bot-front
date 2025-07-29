@@ -1,3 +1,5 @@
+"use client"
+
 import { GalleryVerticalEnd } from "lucide-react"
 import { RegisterForm } from "../../components/auth/RegisterForm.tsx"
 import Link from "next/link"

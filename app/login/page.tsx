@@ -1,8 +1,20 @@
+"use client"
+
 import LoginForm from '../../components/auth/LoginForm.tsx'
 import { GalleryVerticalEnd } from 'lucide-react'
 import Link from "next/link"
+import { supabase } from '@/lib/supabaseClient'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  async function handleLogin(email, password) {
+		  const { error } = await supabase.auth.signInWithPassword({ email, password });
+		  if (error) alert(error.message)
+		  else router.push('/dashboard')
+  }
+				
   return (
     <div className="grid min-h-svh lg:grid-cols-2 font-inter"> {/* Added font-inter for consistency */}
       <div className="flex flex-col gap-4 p-6 md:p-10">
